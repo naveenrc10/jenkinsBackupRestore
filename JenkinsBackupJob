@@ -12,7 +12,7 @@ pipeline {
                 BACKUP_FILE_NAME=jenkins_backup_${DATE}.tar.gz
 				mkdir -p ${BACKUP_DIR}
                 echo $BACKUP_FILE_NAME
-                tar --exclude="${CURRENT_BUILD_FOLDER}" --exclude="${JENKINS_HOME}/jobs/*/workspace" --exclude="${JENKINS_HOME}/workspace/*" --exclude="${JENKINS_HOME}/logs" --exclude="${JENKINS_HOME}/cache"  --exclude="${JENKINS_HOME}/war" -czf ${BACKUP_DIR}/${BACKUP_FILE_NAME} ${JENKINS_HOME}
+                tar --exclude="${CURRENT_BUILD_FOLDER}" --exclude="${JENKINS_HOME}/jobs/*/workspace" --exclude="${JENKINS_HOME}/workspace/*" --exclude="${JENKINS_HOME}/logs" --exclude="${JENKINS_HOME}/cache/*"  --exclude="${JENKINS_HOME}/war" -czf ${BACKUP_DIR}/${BACKUP_FILE_NAME} ${JENKINS_HOME}
                 aws s3 cp ${BACKUP_DIR}/${BACKUP_FILE_NAME} s3://naveenjenkinsbackup1/
                 #rm ${BACKUP_DIR}/*
                 '''
