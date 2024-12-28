@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Restore') {
             steps {
+                cleanWs()
                 sh '''
                     RESTORE_DIR=${WORKSPACE}/jenkins_restore
                     echo $JENKINS_HOME
