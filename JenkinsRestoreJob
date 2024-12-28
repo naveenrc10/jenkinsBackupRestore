@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Restore') {
+            steps {
+                sh '''
+                    RESTORE_DIR=${WORKSPACE}/jenkins_restore
+                    echo $JENKINS_HOME
+                    mkdir -p $RESTORE_DIR
+                    LATEST_FILENAME=$(aws s3 ls ${bucketURI} | sort | tail -n 1 | awk '{print $4}') 
+					if [ "${JenkinsRestoreFile}" != "LATEST" ]; then 
+						echo "LATEST" 
+					    LATEST_FILENAME=${JenkinsRestoreFile} 
+					fi
+                    echo $LATEST_FILENAME 
+                    aws s3 cp ${bucketURI}/$LATEST_FILENAME $RESTORE_DIR
+                    tar -xzvf $RESTORE_DIR/$LATEST_FILENAME -C $RESTORE_DIR 
+                    cp -r $RESTORE_DIR/var/lib/jenkins/* /var/lib/jenkins/
+                    rm -R $RESTORE_DIR
+                '''
+            }
+        }
+    }
+}
